@@ -6,7 +6,6 @@
           (lambda ()
             (setq gc-cons-threshold (expt 2 23))))
 
-
 ;; config
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -28,7 +27,7 @@
   :straight t
   :config
   (setq make-backup-files nil)
-  (setq use-package-always-defer t)
+  ;; (setq use-package-always-defer t)
   (global-hl-line-mode t)
   (global-display-line-numbers-mode t)
   (electric-pair-mode t)
@@ -39,7 +38,6 @@
 
 (use-package theme-changer
   :straight t
-  :demand t
   :init
   (setq calendar-latitude 5.55)
   (setq calendar-longitude -0.22)
@@ -48,7 +46,6 @@
 
 (use-package which-key
   :straight t
-  :demand t
   :config
   (setq which-key-idle-delay 0.25)
   (which-key-mode))
@@ -82,13 +79,37 @@
   :straight t
   :init
   (add-hook 'after-init-hook 'global-company-mode))
+(use-package company-box
+  :straight t
+  :hook (company-mode . company-box-mode))
 
+(use-package vertico
+  :straight t
+  :custom
+  ;; (vertico-scroll-margin 0) ;; Different scroll margin
+  ;; (vertico-count 20) ;; Show more candidates
+  (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+  ;; (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+  :init
+  (vertico-mode))
+
+(use-package format-all
+  :straight t
+  :hook
+  (prog-mode . format-all-mode)
+  (format-all-mode . format-all-ensure-formatter))
+
+(use-package smart-comment
+  :straight t
+  :bind ("M-;" . smart-comment))
+
+(use-package exec-path-from-shell
+  :straight t
+  :init (exec-path-from-shell-initialize))
+
+;; Languages
 (use-package geiser-mit
   :straight t)
-
-(use-package d-mode
-  :straight t
-  :hook (d-mode . eglot-ensure))
 
 (use-package move-mode
   :straight t
@@ -96,5 +117,18 @@
   )
 
 (use-package markdown-mode
-  :ensure t
+  :straight t
   :magic "\\.md\\'")
+
+(use-package csproj-mode
+  :straight t)
+
+(use-package sharper
+  :straight t
+  :bind
+  ("C-c n" . sharper-main-transient)
+  :config (setq sharper-run-only-one t))
+(use-package csharp-mode
+  :straight nil
+  :hook
+  (csharp-mode . eglot-ensure))
